@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AUTH_ENDPOINT } from "../../../routes/backendRoutes";
 import Input from "../../Common/Input";
 
 const HomePage = () => {
@@ -13,13 +14,29 @@ const HomePage = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Lógica de login aqui
-    // Você pode fazer uma requisição à API, validar os campos, etc.
+    console.log(import.meta.env.VITE_API_BASE_URL);
 
-    // Resetar os campos de cpf e senha
+    try {
+      const response = await fetch(`${AUTH_ENDPOINT}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cpf, password }),
+      });
+
+      if (response.ok) {
+        history.push('/quiz');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message);
+      }
+    } catch (error) {
+      console.error('Erro ao realizar login:', error);
+    }
     setCpf("");
     setPassword("");
   };
@@ -37,22 +54,18 @@ const HomePage = () => {
           <div className="rounded-md shadow-sm -space-y-px">
               <Input
                 id="cpf"
-                name="cpf"
                 type="text"
                 autoComplete="current-password"
                 required
-                placeholder="CPF"
                 label="CPF"
                 value={cpf}
                 onChange={handleCpfChange}
               />
               <Input
                 id="password"
-                name="password"
                 type="password"
                 autoComplete="current-password"
                 required
-                placeholder="Password"
                 label="Password"
                 value={password}
                 onChange={handlePasswordChange}
