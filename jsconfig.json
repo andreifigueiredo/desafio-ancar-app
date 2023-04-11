@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2017", 
+    "module": "commonjs",
+    "jsx": "react", 
+    "baseUrl": ".", 
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true, 
+    "noImplicitAny": false
+  },
+  "exclude": ["node_modules", "build", "dist"]
+}

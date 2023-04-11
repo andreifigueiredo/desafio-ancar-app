@@ -11,6 +11,8 @@ export const login = async (cpf, password) => {
     });
 
     if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('token', data.token);
       return true; 
     } else {
       const errorData = await response.json();

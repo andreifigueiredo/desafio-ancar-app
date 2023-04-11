@@ -11,11 +11,6 @@ export default {
       '@pages': path.resolve(__dirname, 'src/components/Pages'),
     },
   },
-  css: {
-    postcss: {
-      plugins: [require('tailwindcss')],
-    },
-  },
   esbuild: {
     jsxFactory: 'React.createElement',
     jsxInject: `import React from 'react';`,
