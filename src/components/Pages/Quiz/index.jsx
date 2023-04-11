@@ -8,21 +8,21 @@ const QuizPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white shadow-md rounded-md p-8 max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-6">Lista de Questionários</h2>
-        <ul>
-          {quizzes.map(quiz => (
-            <li key={quiz.id} className="mb-4">
-              <h3 className="text-xl font-medium">{quiz.name}</h3>
-              <p className="text-gray-600">{quiz.description}</p>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-8 text-center">
-          <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600">
-            Iniciar Quiz
-          </button>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {quizzes.map(quiz => (
+          <div
+            key={quiz.id}
+            className="bg-white shadow-md rounded-md p-4 hover:shadow-lg transition duration-300"
+          >
+            <h3 className="text-xl font-medium mb-2">{quiz.name}</h3>
+            <p className="text-gray-600">{quiz.description}</p>
+            <div className="mt-4 text-center">
+              <button className="bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600">
+                Iniciar Quiz
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

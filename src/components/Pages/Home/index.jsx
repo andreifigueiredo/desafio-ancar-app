@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { AUTH_ENDPOINT } from "../../../routes/backendRoutes";
+import { useNavigate } from 'react-router-dom';
+import { login } from "../../../actions/authActions";
+import { QUIZ_ROUTE } from "../../../routes/router";
 import Input from "../../Common/Input";
+import { cpfMask } from "../../../masks/cnpjMask";
 
 const HomePage = () => {
   const [cpf, setCpf] = useState("");
   const [password, setPassword] = useState("");
+  const navigateTo = useNavigate();
 
   const handleCpfChange = (e) => {
     setCpf(e.target.value);
@@ -16,30 +20,17 @@ const HomePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(import.meta.env.VITE_API_BASE_URL);
-
+  
     try {
-      const response = await fetch(`${AUTH_ENDPOINT}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cpf, password }),
-      });
-
-      if (response.ok) {
-        history.push('/quiz');
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message);
-      }
+      await login(cpf, password);
+      navigateTo(QUIZ_ROUTE); 
     } catch (error) {
       console.error('Erro ao realizar login:', error);
     }
     setCpf("");
     setPassword("");
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -58,7 +49,7 @@ const HomePage = () => {
                 autoComplete="current-password"
                 required
                 label="CPF"
-                value={cpf}
+                value={cpfMask(cpf)}
                 onChange={handleCpfChange}
               />
               <Input
