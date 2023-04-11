@@ -1,15 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { Grid, TextField, Container, Paper, Typography, Button, Box } from '@mui/material';
 import { login } from "../../actions/authActions";
 import { QUIZZES_ROUTE } from "../../routes/router";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { cpfMask } from "../../masks/cnpjMask";
-import Container from "@mui/material/Container";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 
 const HomePage = () => {
   const [cpf, setCpf] = useState("");

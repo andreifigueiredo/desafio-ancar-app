@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listQuizzes } from '../../actions/quizActions';
 import { QUIZZES_ROUTE } from '../../routes/router';
-import { Grid, Card, CardContent, Typography, Button } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, Box } from '@mui/material';
 
 const QuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -26,7 +26,7 @@ const QuizzesPage = () => {
   }, [navigateTo]);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <Box minHeight="100vh" bgcolor="#f8f9fa" display="flex" alignItems="center" justifyContent="center">
       <Grid container spacing={4} maxWidth="md" sx={{ mx: 'auto', px: 4 }}>
         {quizzes.map(quiz => (
           <Grid key={quiz.id} item xs={12} sm={6} md={4}>
@@ -51,7 +51,7 @@ const QuizzesPage = () => {
           </Grid>
         ))}
       </Grid>
-    </div>
+    </Box>
   );
 };
 
