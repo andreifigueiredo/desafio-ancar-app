@@ -28,58 +28,46 @@ export const getQuiz = async (quizId) => {
   }
 };
 
-// TODO: Daqui pra baixo fazer todas as actions
-
-export const createQuiz = async (quizId) => {
+export const createQuiz = async (name, description, questions) => {
   try {
-    const response = await fetch(`${QUIZ_ENDPOINT}/${quizId}`, {
+    const response = await fetch(QUIZ_ENDPOINT, {
+      method: 'POST',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, description, questions }),
     });
+
     if (response.ok) {
-      return await response.json();
+      return true; 
     } else {
-      throw response;
+      const errorData = await response.json();
+      throw new Error(errorData.message);     
     }
   } catch (error) {
-    console.error('Erro ao listar os quizzes:', error);
-    throw error;
+    console.error('Erro na criação de questionário:', error);
+    throw error; 
   }
 };
 
-export const updateQuiz = async (quizId) => {
+export const updateQuiz = async (quizId, name, description, questions) => {
   try {
     const response = await fetch(`${QUIZ_ENDPOINT}/${quizId}`, {
+      method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, description, questions }),
     });
-    if (response.ok) {
-      return await response.json();
-    } else {
-      throw response;
-    }
-  } catch (error) {
-    console.error('Erro ao listar os quizzes:', error);
-    throw error;
-  }
-};
 
-export const deleteQuiz = async (quizId) => {
-  try {
-    const response = await fetch(`${QUIZ_ENDPOINT}/${quizId}`, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
     if (response.ok) {
-      return await response.json();
+      return true; 
     } else {
-      throw response;
+      const errorData = await response.json();
+      throw new Error(errorData.message);     
     }
   } catch (error) {
-    console.error('Erro ao listar os quizzes:', error);
-    throw error;
+    console.error('Erro na edição de questionário:', error);
+    throw error; 
   }
 };

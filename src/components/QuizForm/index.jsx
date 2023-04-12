@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { Box, Typography, TextField, IconButton, Button } from '@mui/material';
+import { Box, Typography, TextField, IconButton, Button, Alert } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const QuizForm = ({
   name,
   description,
+  error,
   questions,
   onNameChange,
   onDescriptionChange,
@@ -20,6 +21,11 @@ const QuizForm = ({
       <Typography variant="h5" component="h2" gutterBottom>
         Editar Quiz
       </Typography>
+      {error && 
+        <Alert severity="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      }
       <TextField
         label="Nome do Quiz"
         fullWidth
@@ -39,12 +45,12 @@ const QuizForm = ({
         onChange={onDescriptionChange}
       />
       <Typography variant="subtitle1" gutterBottom>
-        Questões do Quiz
+        Questões
       </Typography>
       {questions.map(({id, description}, index) => (
-        <Box key={id} display="flex" alignItems="center">
+        <Box key={id || index} display="flex" alignItems="center">
           <TextField
-            label={`Questão ${id + 1}`}
+            label={`Questão ${index + 1}`}
             fullWidth
             variant="outlined"
             margin="normal"
@@ -80,6 +86,7 @@ const QuizForm = ({
 QuizForm.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  error: PropTypes.string,
   questions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,

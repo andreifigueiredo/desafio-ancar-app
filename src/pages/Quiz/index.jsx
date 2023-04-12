@@ -1,32 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Container } from '@mui/material';
 import QuizForm from '../../components/QuizForm';
 import { HOME_ROUTE } from '../../routes/router';
+import { getQuiz, updateQuiz } from '../../actions/quizActions';
 
-const QuizPage = ({ quizId }) => {
+const QuizPage = () => {
   const [quiz, setQuiz] = useState({});
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [questions, setQuestions] = useState([]);
+  const [error, setError] = useState("");
+  const { id: quizId } = useParams(); 
   const navigateTo = useNavigate();
-
-  const getQuiz = async (quizId) => {
-    return {
-      name: 'Nome do Quiz',
-      description: 'Descrição do Quiz',
-      questions: [
-        { id: 1, description: 'Pergunta 1' },
-        { id: 2, description: 'Pergunta 2' },
-        { id: 3, description: 'Pergunta 3' },
-      ],
-    };
-  };
-  
-  const updateQuiz = async (quizId, updatedQuiz) => {
-    console.log('Mock: updateQuiz', quizId, updatedQuiz);
-  };
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -45,6 +31,14 @@ const QuizPage = ({ quizId }) => {
     };
     fetchQuiz();
   }, [navigateTo]);
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
 
   const handleQuestionChange = (index, event) => {
     const updatedQuestions = [...questions];
@@ -68,19 +62,15 @@ const QuizPage = ({ quizId }) => {
 
   const handleUpdateQuiz = async () => {
     try {
-      const updatedQuiz = {
-        ...quiz,
-        name,
-        description,
-        questions,
-      };
-      await updateQuiz(quizId, updatedQuiz);
-      navigateTo(`/quizzes/${quizId}`);
+      await updateQuiz(quizId, name, description, questions);
+      navigateTo(HOME_ROUTE);
     } catch (error) {
-      console.error('Erro ao atualizar o quiz:', error);
+      console.error('Erro ao criar o cadastro:', error);
+      setError(error.message);
     }
   };
 
+  // TODO: CORRIGIR REMOÇÃO DE QUESTÕES
   return (
     <Box minHeight="100vh" bgcolor="#f8fafc" display="flex" alignItems="center" justifyContent="center">
       <Container maxWidth="sm">
@@ -88,8 +78,9 @@ const QuizPage = ({ quizId }) => {
           name={name} 
           description={description}
           questions={questions}
-          onNameChange={setName}
-          onDescriptionChange={setDescription}
+          error={error}
+          onNameChange={handleNameChange}
+          onDescriptionChange={handleDescriptionChange}
           onQuestionChange={handleQuestionChange}
           onRemoveQuestion={handleRemoveQuestion}
           onAddQuestion={handleAddQuestion}
@@ -100,10 +91,6 @@ const QuizPage = ({ quizId }) => {
       </Container>
     </Box>
   );
-};
-
-QuizPage.propTypes = {
-  quizId: PropTypes.string.isRequired,
 };
 
 export default QuizPage;

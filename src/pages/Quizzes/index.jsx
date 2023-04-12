@@ -1,39 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container } from '@mui/material';
 import QuizForm from '../../components/QuizForm';
 import { HOME_ROUTE } from '../../routes/router';
+import { createQuiz } from '../../actions/quizActions';
 
 const CreateQuizPage = () => {
-  const [quiz, setQuiz] = useState({});
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [questions, setQuestions] = useState([]);
+  const [error, setError] = useState("");
   const navigateTo = useNavigate();
 
-  
-  const createQuiz = async (quizId, updatedQuiz) => {
-    console.log('Mock: createQuiz', quizId, updatedQuiz);
+  const handleNameChange = (e) => {
+    setName(e.target.value);
   };
 
-  useEffect(() => {
-    const fetchQuiz = async () => {
-      try {
-        const quizData = await getQuiz(quizId);
-        setQuiz(quizData);
-        setName(quizData.name);
-        setDescription(quizData.description);
-        setQuestions(quizData.questions);
-      } catch (error) {
-        console.error('Erro ao buscar o quiz:', error);
-        if (error && error.status === 401) {
-          navigateTo('/');
-        }
-      }
-    };
-    fetchQuiz();
-  }, [navigateTo]);
-
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+  
   const handleQuestionChange = (index, event) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index].description = event.target.value;
@@ -41,7 +27,7 @@ const CreateQuizPage = () => {
   };
 
   const handleAddQuestion = () => {
-    setQuestions([...questions, { id: Date.now(), description: '' }]);
+    setQuestions([...questions, { description: '' }]);
   };
 
   const handleRemoveQuestion = (index) => {
@@ -52,16 +38,15 @@ const CreateQuizPage = () => {
 
   const handleCreateQuiz = async () => {
     try {
-      const updatedQuiz = {
-        ...quiz,
+      await createQuiz(
         name,
         description,
-        questions,
-      };
-      await createQuiz(quizId, updatedQuiz);
-      navigateTo(`/quizzes/${quizId}`);
+        questions
+      );
+      navigateTo(HOME_ROUTE);
     } catch (error) {
-      console.error('Erro ao atualizar o quiz:', error);
+      console.error('Erro ao criar o cadastro:', error);
+      setError(error.message);
     }
   };
 
@@ -76,8 +61,9 @@ const CreateQuizPage = () => {
           name={name} 
           description={description}
           questions={questions}
-          onNameChange={setName}
-          onDescriptionChange={setDescription}
+          error={error}
+          onNameChange={handleNameChange}
+          onDescriptionChange={handleDescriptionChange}
           onQuestionChange={handleQuestionChange}
           onRemoveQuestion={handleRemoveQuestion}
           onAddQuestion={handleAddQuestion}

@@ -10,7 +10,7 @@ const CreateUserPage = () => {
   const [cpf, setCpf] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navitageTo = useNavigate();
+  const navigateTo = useNavigate();
 
   const handleCpfChange = (e) => {
     setCpf(e.target.value);
@@ -29,12 +29,16 @@ const CreateUserPage = () => {
   
     try {
       await signUp(name, cpf, password);
-      navitageTo(HOME_ROUTE); 
+      navigateTo(HOME_ROUTE); 
     } catch (error) {
       console.error('Erro ao realizar signUp:', error.message);
       setError(error.message);
     }
   };
+
+  const handleCancel = () => {
+    navigateTo(HOME_ROUTE);
+  }
 
   return (
     <Container
@@ -111,6 +115,15 @@ const CreateUserPage = () => {
             style={{ marginTop: "16px" }}
           >
             Criar Usuário
+          </Button>
+          <Button 
+            variant="contained" 
+            color="secondary" 
+            fullWidth 
+            onClick={handleCancel} 
+            style={{ marginTop: "16px" }}
+          >
+            Cancelar
           </Button>
         </form>
       </Paper>
