@@ -8,15 +8,17 @@ const HomePage = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [count, setCount] = useState(0);
   const navigateTo = useNavigate();
 
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
         const quizzesData = await listQuizzes(rowsPerPage, page+1);
-        setQuizzes(quizzesData);
+        setQuizzes(quizzesData.rows);
+        setCount(quizzesData.count);
       } catch (error) {
-        console.log('page', error);
+        console.error('page', error);
         if (error && error.status === 401) {
           navigateTo('/');
         } else {
@@ -92,7 +94,7 @@ const HomePage = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50]}
               component="div"
-              count={quizzes.length}
+              count={count}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

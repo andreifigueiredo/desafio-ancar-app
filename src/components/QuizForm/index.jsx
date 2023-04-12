@@ -57,13 +57,16 @@ const QuizForm = ({
             value={description}
             onChange={event => onQuestionChange(index, event)}
           />
-          <IconButton
-            aria-label="Remover questão"
-            onClick={() => onRemoveQuestion(index)}
-            size="small"
-          >
-            <DeleteIcon />
-          </IconButton>
+          {
+            isCreating &&
+              <IconButton
+                aria-label="Remover questão"
+                onClick={() => onRemoveQuestion(index)}
+                size="small"
+              >
+                <DeleteIcon />
+              </IconButton>
+          }
         </Box>
       ))}
       <Box display="flex" justifyContent="center" marginTop={2}>
