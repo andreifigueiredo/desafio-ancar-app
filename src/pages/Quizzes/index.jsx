@@ -1,58 +1,88 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { listQuizzes } from '../../actions/quizActions';
-import { QUIZZES_ROUTE } from '../../routes/router';
-import { Grid, Card, CardContent, Typography, Button, Box } from '@mui/material';
+import { Box, Container } from '@mui/material';
+import QuizForm from '../../components/QuizForm';
 
-const QuizzesPage = () => {
-  const [quizzes, setQuizzes] = useState([]);
+const CreateQuizPage = () => {
+  const [quiz, setQuiz] = useState({});
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [questions, setQuestions] = useState([]);
   const navigateTo = useNavigate();
 
+  
+  const createQuiz = async (quizId, updatedQuiz) => {
+    console.log('Mock: createQuiz', quizId, updatedQuiz);
+  };
+
   useEffect(() => {
-    const fetchQuizzes = async () => {
+    const fetchQuiz = async () => {
       try {
-        const quizzesData = await listQuizzes(9, 1);
-        setQuizzes(quizzesData);
+        const quizData = await getQuiz(quizId);
+        setQuiz(quizData);
+        setName(quizData.name);
+        setDescription(quizData.description);
+        setQuestions(quizData.questions);
       } catch (error) {
-        console.log('page', error);
+        console.error('Erro ao buscar o quiz:', error);
         if (error && error.status === 401) {
           navigateTo('/');
-        } else {
-          console.error('Erro ao buscar os quizzes:', error);
         }
       }
     };
-    fetchQuizzes();
+    fetchQuiz();
   }, [navigateTo]);
 
+  const handleQuestionChange = (index, event) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index].description = event.target.value;
+    setQuestions(updatedQuestions);
+  };
+
+  const handleAddQuestion = () => {
+    setQuestions([...questions, { id: Date.now(), description: '' }]);
+  };
+
+  const handleRemoveQuestion = (index) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions.splice(index, 1);
+    setQuestions(updatedQuestions);
+  };
+
+  const handleCreateQuiz = async () => {
+    try {
+      const updatedQuiz = {
+        ...quiz,
+        name,
+        description,
+        questions,
+      };
+      await createQuiz(quizId, updatedQuiz);
+      navigateTo(`/quizzes/${quizId}`);
+    } catch (error) {
+      console.error('Erro ao atualizar o quiz:', error);
+    }
+  };
+
+
   return (
-    <Box minHeight="100vh" bgcolor="#f8f9fa" display="flex" alignItems="center" justifyContent="center">
-      <Grid container spacing={4} maxWidth="md" sx={{ mx: 'auto', px: 4 }}>
-        {quizzes.map(quiz => (
-          <Grid key={quiz.id} item xs={12} sm={6} md={4}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <CardContent>
-                <Typography variant="h6" component="h3" sx={{ mb: 2 }}>
-                  {quiz.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {quiz.description}
-                </Typography>
-              </CardContent>
-              <Button
-                onClick={() => navigateTo(`${QUIZZES_ROUTE}/${quiz.id}`)}
-                variant="contained"
-                color="primary"
-                sx={{ mt: 'auto', borderRadius: 0 }}
-              >
-                Editar Quiz
-              </Button>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+    <Box minHeight="100vh" bgcolor="#f8fafc" display="flex" alignItems="center" justifyContent="center">
+      <Container maxWidth="sm">
+        <QuizForm 
+          name={name} 
+          description={description}
+          questions={questions}
+          onNameChange={setName}
+          onDescriptionChange={setDescription}
+          onQuestionChange={handleQuestionChange}
+          onRemoveQuestion={handleRemoveQuestion}
+          onAddQuestion={handleAddQuestion}
+          onSaveQuiz={handleCreateQuiz}
+          isCreating={true}  
+        />
+      </Container>
     </Box>
   );
 };
 
-export default QuizzesPage;
+export default CreateQuizPage;
