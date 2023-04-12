@@ -69,11 +69,14 @@ const QuizForm = ({
           }
         </Box>
       ))}
-      <Box display="flex" justifyContent="center" marginTop={2}>
-        <Button variant="contained" onClick={onAddQuestion}>
-          Adicionar Questão
-        </Button>
-      </Box>
+      {
+        isCreating &&
+          <Box display="flex" justifyContent="center" marginTop={2}>
+            <Button variant="contained" onClick={onAddQuestion}>
+              Adicionar Questão
+            </Button>
+          </Box>
+      }
       <Box display="flex" justifyContent="flex-end" marginTop={2}>
         <Button variant="contained" color="primary" onClick={onSaveQuiz}>
           {isCreating ? "Criar Questionário" : "Salvar Questionáriio"}
