@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Box, Container } from '@mui/material';
 import QuizForm from '../../components/QuizForm';
+import { HOME_ROUTE } from '../../routes/router';
 
 const QuizPage = ({ quizId }) => {
   const [quiz, setQuiz] = useState({});
@@ -25,10 +26,6 @@ const QuizPage = ({ quizId }) => {
   
   const updateQuiz = async (quizId, updatedQuiz) => {
     console.log('Mock: updateQuiz', quizId, updatedQuiz);
-  };
-  
-  const deleteQuiz = async (quizId) => {
-    console.log('Mock: deleteQuiz', quizId);
   };
 
   useEffect(() => {
@@ -65,6 +62,10 @@ const QuizPage = ({ quizId }) => {
     setQuestions(updatedQuestions);
   };
 
+  const handleCancelQuiz = () => {
+    navigateTo(HOME_ROUTE);
+  }
+
   const handleUpdateQuiz = async () => {
     try {
       const updatedQuiz = {
@@ -77,15 +78,6 @@ const QuizPage = ({ quizId }) => {
       navigateTo(`/quizzes/${quizId}`);
     } catch (error) {
       console.error('Erro ao atualizar o quiz:', error);
-    }
-  };
-
-  const handleDeleteQuiz = async () => {
-    try {
-      await deleteQuiz(quizId);
-      navigateTo('/quizzes');
-    } catch (error) {
-      console.error('Erro ao deletar o quiz:', error);
     }
   };
 
@@ -102,7 +94,7 @@ const QuizPage = ({ quizId }) => {
           onRemoveQuestion={handleRemoveQuestion}
           onAddQuestion={handleAddQuestion}
           onSaveQuiz={handleUpdateQuiz}
-          onDeleteQuiz={handleDeleteQuiz}
+          onCancelQuiz={handleCancelQuiz}
           isCreating={false}  
         />
       </Container>

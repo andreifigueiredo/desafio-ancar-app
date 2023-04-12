@@ -6,12 +6,13 @@ import { Grid, Card, CardContent, Typography, Button, Box } from '@mui/material'
 
 const HomePage = () => {
   const [quizzes, setQuizzes] = useState([]);
+  const [page, setPage] = useState(1);
   const navigateTo = useNavigate();
 
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
-        const quizzesData = await listQuizzes(9, 1);
+        const quizzesData = await listQuizzes(9, page);
         setQuizzes(quizzesData);
       } catch (error) {
         console.log('page', error);
@@ -31,6 +32,16 @@ const HomePage = () => {
 
   const handleCreateUser = () => {
     navigateTo(USERS_ROUTE);
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    setPage(page + 1);
   };
 
   return (
@@ -60,10 +71,16 @@ const HomePage = () => {
         ))}
       </Grid>
       <Box position="absolute" bottom={16} left={0} right={0} display="flex" justifyContent="center">
+      <Button variant="contained" disabled={page===1} color="secondary" onClick={handlePreviousPage} sx={{ mx: 2 }}>
+          Página Anterior
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleNextPage} sx={{ mx: 2 }}>
+          Próxima Página
+        </Button>
         <Button variant="contained" color="primary" onClick={handleCreateQuiz} sx={{ mx: 2 }}>
           Criar Questionário
         </Button>
-        <Button variant="contained" color="secondary" onClick={handleCreateUser} sx={{ mx: 2 }}>
+        <Button variant="contained" color="primary" onClick={handleCreateUser} sx={{ mx: 2 }}>
           Criar Usuário
         </Button>
       </Box>

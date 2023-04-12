@@ -12,7 +12,7 @@ const QuizForm = ({
   onRemoveQuestion,
   onAddQuestion,
   onSaveQuiz,
-  onDeleteQuiz,
+  onCancelQuiz,
   isCreating
 }) => {
   return (
@@ -61,20 +61,17 @@ const QuizForm = ({
         </Box>
       ))}
       <Box display="flex" justifyContent="center" marginTop={2}>
-        <Button variant="outlined" onClick={onAddQuestion}>
+        <Button variant="contained" onClick={onAddQuestion}>
           Adicionar Questão
         </Button>
       </Box>
       <Box display="flex" justifyContent="flex-end" marginTop={2}>
-        {!isCreating ? (
-          <Button variant="contained" color="primary" onClick={onSaveQuiz}>
-            Salvar
-          </Button>
-        ) : (
-          <Button variant="outlined" color="error" onClick={onDeleteQuiz} sx={{ marginLeft: 2 }}>
-            Cancelar
-          </Button>
-        )}
+        <Button variant="contained" color="primary" onClick={onSaveQuiz}>
+          {isCreating ? "Criar Questionário" : "Salvar Questionáriio"}
+        </Button>
+        <Button variant="contained" color="secondary" onClick={onCancelQuiz} sx={{ marginLeft: 2 }}>
+          Cancelar
+        </Button>
       </Box>
     </Box>
   );
@@ -95,7 +92,7 @@ QuizForm.propTypes = {
   onRemoveQuestion: PropTypes.func.isRequired,
   onAddQuestion: PropTypes.func.isRequired,
   onSaveQuiz: PropTypes.func,
-  onDeleteQuiz: PropTypes.func,
+  onCancelQuiz: PropTypes.func,
   isCreating: PropTypes.bool
 };
 

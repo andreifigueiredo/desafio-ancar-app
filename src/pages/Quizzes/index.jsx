@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container } from '@mui/material';
 import QuizForm from '../../components/QuizForm';
+import { HOME_ROUTE } from '../../routes/router';
 
 const CreateQuizPage = () => {
   const [quiz, setQuiz] = useState({});
@@ -64,6 +65,9 @@ const CreateQuizPage = () => {
     }
   };
 
+  const handleCancelQuiz = () => {
+    navigateTo(HOME_ROUTE);
+  }
 
   return (
     <Box minHeight="100vh" bgcolor="#f8fafc" display="flex" alignItems="center" justifyContent="center">
@@ -78,6 +82,7 @@ const CreateQuizPage = () => {
           onRemoveQuestion={handleRemoveQuestion}
           onAddQuestion={handleAddQuestion}
           onSaveQuiz={handleCreateQuiz}
+          onCancelQuiz={handleCancelQuiz}
           isCreating={true}  
         />
       </Container>
